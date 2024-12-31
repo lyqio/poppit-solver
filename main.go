@@ -125,36 +125,49 @@ func options_4(node *PoppitNode) []PoppitNode {
     return []PoppitNode{child1, child2, child3, child4, child5}
 }
 
-func generate_children(node *PoppitNode) {
+var cache = make(map[string][]*PoppitNode)
+func generate_children(node *PoppitNode) []*PoppitNode {
+    val, in := cache[node.hash()]
+    if in {
+	node.children = val
+	return val
+    }
+
+    children := []*PoppitNode{}
+
     if node.position[1] > 0 {
 	child := options_1(node)
-	node.children = append(node.children, &child)
+	children = append(children, &child)
     }
 
     if node.position[2] > 0 {
 	opts := options_2(node)
 	for i := 0; i < len(opts); i++ {
-	    node.children = append(node.children, &opts[i])
+	    children = append(children, &opts[i])
 	}
     }
 
     if node.position[3] > 0 {
 	opts := options_3(node)
 	for i := 0; i < len(opts); i++ {
-	    node.children = append(node.children, &opts[i])
+	    children = append(children, &opts[i])
 	}
     }
 
     if node.position[4] > 0 {
 	opts := options_4(node)
 	for i := 0; i < len(opts); i++ {
-	    node.children = append(node.children, &opts[i])
+	    children = append(children, &opts[i])
 	}
     }
 
-    for i := 0; i < len(node.children); i++ {
-	generate_children(node.children[i])
+    for i := 0; i < len(children); i++ {
+	children[i].children = generate_children(children[i])
     }
+
+    node.children = children
+    cache[node.hash()] = children
+    return children
 }
 
 func assign_children(node *PoppitNode) {
@@ -396,6 +409,7 @@ func play_game() {
 	{1, 1, 1, 1},
 	{1, 1, 1, 1},
 	{1, 1, 1, 1},
+	{1, 1, 1, 1},
     }
 
     pos := PoppitNode {
@@ -426,32 +440,4 @@ func play_game() {
 func main() {
 
     play_game()
-
-    return 
-    start_position := PoppitNode {
-	winner:   -1,
-	player1:  true,
-	position: map[int]int {
-	    1: 0,
-	    2: 2,
-	    3: 0,
-	    4: 0,
-	    5: 0,
-	    6: 0,
-	},
-	children: nil,
-    } 
-
-    known_positions := make(map[string]*PoppitNode)
-    known_positions[start_position.hash()] = &start_position
-    
-    generate_children(&start_position)
-    assign_children(&start_position)
-
-    fmt.Println("\n\n\n\n")
-    fmt.Printf("Winner is %d\n", start_position.winner)
-    
-//    for i := 0; i < len(start_position.children); i++ {
-//	fmt.Printf("%d | ", start_position.children[i].winner)
-//    }
 }
