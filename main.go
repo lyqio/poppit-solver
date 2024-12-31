@@ -176,6 +176,65 @@ func options_5(node *PoppitNode) []PoppitNode {
     return []PoppitNode{child1, child2, child3, child4, child5, child6, child7}
 }
 
+func options_6(node *PoppitNode) []PoppitNode {
+    // 6 to 5
+    // 6 to 4, 1
+    // 6 to 3, 2
+
+    // 6 to 4
+    // 6 to 3, 1
+    // 6 to 2x2
+
+    // 6 to 3
+    // 6 to 1, 2
+
+    new_pos := copyMap(node.position)
+    new_pos[6]--
+    new_pos[5]++
+    child1 := make_node(node, new_pos)
+
+    new_pos2 := copyMap(node.position)
+    new_pos2[6]--
+    new_pos2[4]++
+    new_pos2[1]++
+    child2 := make_node(node, new_pos2)
+
+    new_pos3 := copyMap(node.position)
+    new_pos3[6]--
+    new_pos3[3]++
+    new_pos3[2]++
+    child3 := make_node(node, new_pos3)
+
+    new_pos4 := copyMap(node.position)
+    new_pos4[6]--
+    new_pos4[4]++
+    child4 := make_node(node, new_pos4)
+
+    new_pos5 := copyMap(node.position)
+    new_pos5[6]--
+    new_pos5[1]++
+    new_pos5[3]++
+    child5 := make_node(node, new_pos5)
+
+    new_pos6 := copyMap(node.position)
+    new_pos6[6]--
+    new_pos6[2]++
+    child6 := make_node(node, new_pos6)
+
+    new_pos7 := copyMap(node.position)
+    new_pos7[6]--
+    new_pos7[3]++
+    child7 := make_node(node, new_pos7)
+
+    new_pos8 := copyMap(node.position)
+    new_pos8[6]--
+    new_pos8[1]++
+    new_pos8[2]++
+    child8 := make_node(node, new_pos8)
+
+    return []PoppitNode{child1, child2, child3, child4, child5, child6, child7, child8}
+}
+
 var cache = make(map[string][]*PoppitNode)
 func generate_children(node *PoppitNode) []*PoppitNode {
     val, in := cache[node.hash()]
@@ -217,6 +276,14 @@ func generate_children(node *PoppitNode) []*PoppitNode {
 	for i := 0; i < len(opts); i++ {
 	    children = append(children, &opts[i])
 	}
+    }
+
+    if node.position[6] > 0 {
+	opts := options_6(node)
+	for i := 0; i < len(opts); i++ {
+	    children = append(children, &opts[i])
+	}
+
     }
 
     for i := 0; i < len(children); i++ {
@@ -464,11 +531,12 @@ func user_move(pos *PoppitNode, board *[][]int) {
 
 func play_game2() {
     board := [][]int{
-	{1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
     }
 
     pos := PoppitNode {
@@ -499,11 +567,12 @@ func play_game2() {
 
 func play_game() {
     board := [][]int{
-	{1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
     }
 
     pos := PoppitNode {
@@ -532,6 +601,5 @@ func play_game() {
 }
 
 func main() {
-
     play_game2()
 }
