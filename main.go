@@ -34,17 +34,20 @@ func (p PoppitNode)hash() string {
     return fmt.Sprintf("%t %v", p.player1, p.position)
 }
 
+func make_node(node *PoppitNode, pos map[int]int) PoppitNode {
+    return PoppitNode {
+	winner: -1,
+	player1: !node.player1,
+	position: pos,
+	children: nil,
+    }
+}
+
 func options_1(node *PoppitNode) PoppitNode {
     new_pos := copyMap(node.position)
     new_pos[1]--
 
-    child := PoppitNode {
-	winner:  -1,
-	player1: !node.player1,
-	position: new_pos,
-	children: nil,
-    }
-
+    child := make_node(node, new_pos)
     return child
 }
 
@@ -52,25 +55,11 @@ func options_2(node *PoppitNode) []PoppitNode {
     new_pos := copyMap(node.position)
     new_pos[2]--
     new_pos[1]++
-
-    child := PoppitNode {
-	winner:  -1,
-	player1: !node.player1,
-	position: new_pos,
-	children: nil,
-    }
-
-    node.children = append(node.children, &child)
+    child := make_node(node, new_pos)
 
     new_pos2 := copyMap(node.position)
     new_pos2[2]--
-
-    child2 := PoppitNode {
-	winner:  -1,
-	player1: !node.player1,
-	position: new_pos2,
-	children: nil,
-    }
+    child2 := make_node(node, new_pos2)
 
     return []PoppitNode{child, child2}
 }
@@ -79,47 +68,61 @@ func options_3(node *PoppitNode) []PoppitNode {
     new_pos := copyMap(node.position)
     new_pos[3]--
     new_pos[2]++
-
-    child1 := PoppitNode {
-	winner: -1,
-	player1: !node.player1,
-	position: new_pos,
-	children: nil,
-    }
+    child1 := make_node(node, new_pos)
 
     new_pos2 := copyMap(node.position)
     new_pos2[3]--
     new_pos2[1] += 2
-
-    child2 := PoppitNode {
-	winner: -1,
-	player1: !node.player1,
-	position: new_pos2,
-	children: nil,
-    }
+    child2 := make_node(node, new_pos2)
 
     new_pos3 := copyMap(node.position)
     new_pos3[3]--
     new_pos3[1]++
-
-    child3 := PoppitNode {
-	winner: -1,
-	player1: !node.player1,
-	position: new_pos3,
-	children: nil,
-    }
+    child3 := make_node(node, new_pos3)
 
     new_pos4 := copyMap(node.position)
     new_pos4[3]--
-
-    child4 := PoppitNode {
-	winner: -1,
-	player1: !node.player1,
-	position: new_pos4,
-	children: nil,
-    }
+    child4 := make_node(node, new_pos4)
 
     return []PoppitNode{child1, child2, child3, child4}
+}
+
+func options_4(node *PoppitNode) []PoppitNode {
+    // 4 to 3
+    // 4 to 1, 2
+
+    // 4 to 2
+    // 4 to 2 1
+
+    // 4 to 1
+
+    new_pos := copyMap(node.position)
+    new_pos[4]--
+    new_pos[3]++
+    child1 := make_node(node, new_pos)
+
+    new_pos2 := copyMap(node.position)
+    new_pos2[4]--
+    new_pos2[1]++
+    new_pos2[2]++
+    child2 := make_node(node, new_pos2)
+
+    new_pos3 := copyMap(node.position)
+    new_pos3[4]--
+    new_pos3[2]++
+    child3 := make_node(node, new_pos3)
+
+    new_pos4 := copyMap(node.position)
+    new_pos4[4]--
+    new_pos4[1] += 2
+    child4 := make_node(node, new_pos4)
+
+    new_pos5 := copyMap(node.position)
+    new_pos5[4]--
+    new_pos5[1]++
+    child5 := make_node(node, new_pos5)
+
+    return []PoppitNode{child1, child2, child3, child4, child5}
 }
 
 func generate_children(node *PoppitNode) {
@@ -137,6 +140,13 @@ func generate_children(node *PoppitNode) {
 
     if node.position[3] > 0 {
 	opts := options_3(node)
+	for i := 0; i < len(opts); i++ {
+	    node.children = append(node.children, &opts[i])
+	}
+    }
+
+    if node.position[4] > 0 {
+	opts := options_4(node)
 	for i := 0; i < len(opts); i++ {
 	    node.children = append(node.children, &opts[i])
 	}
@@ -383,9 +393,9 @@ func user_move(pos *PoppitNode, board *[][]int) {
 
 func play_game() {
     board := [][]int{
-	{1, 1, 1},
-	{1, 1, 1},
-	{1, 1, 1},
+	{1, 1, 1, 1},
+	{1, 1, 1, 1},
+	{1, 1, 1, 1},
     }
 
     pos := PoppitNode {
@@ -395,8 +405,11 @@ func play_game() {
 	children: nil,
     }
 
+    fmt.Println("Generating nodes...")
     generate_children(&pos)
+    fmt.Println("Assigning nodes...")
     assign_children(&pos)
+    fmt.Println("Finished!")
 
     fmt.Printf("Player %d wins", pos.winner)
 
