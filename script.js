@@ -25,17 +25,70 @@ function add_grid(n) {
 
 // draw the grid to the screen
 let elements = add_grid(6)
+let board = [
+    [1, 1, 0, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1]
+]
 
+function update_board(elem, board) {
+    for (let i of elem) {
+	for (let element of i) {
+	    pos = Number(element.id)
+	    var x = Math.floor(pos/6.0)
+	    var y = pos % 6
+
+	    if (board[x][y] != 1) {
+		element.className = `d${element.className}`
+	    }
+	}
+    }
+}
+
+update_board(elements, board)
+
+function has(s, item) {
+    for (let i of s) {
+	all_match = true
+	for (let q = 0; q < i.length; q++) {
+	    if (i[q] != item[q]) {
+		all_match = false
+	    }
+	}
+
+	if (all_match) {
+	    return true
+	}
+    }
+    return false
+}
 
 function valid_spot(s, x, y) {
     if (s[0][0] != x) {
 	return false
     }
 
+    if (s.length == 3) {
+	return false
+    }
+
+    let y_values = []
+    for (let item of s) {
+	y_values.push(item[1])
+    }
+    y_values.sort()
+
+    if (y_values[0] != y+1 && y_values[y_values.length-1] != y-1) {
+	return false
+    }
+
     return true
 }
 
-let selected = []
+let selected = [] 
 function handle_click(e) {
     div_element = e.target
     pos = Number(div_element.id)
@@ -43,12 +96,17 @@ function handle_click(e) {
     var x = Math.floor(pos/6.0)
     var y = pos % 6
 
+    if (has(selected, [x, y])) {
+	return
+    }
+
+    if (board[x][y] != 1) {
+	return
+    }
+
     if (selected.length == 0) {
 	selected.push([x, y])
 	div_element.style.backgroundColor = "red"
-    }
-
-    if (selected.includes([x, y])) {
 	return
     }
 

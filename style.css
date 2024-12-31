@@ -49,6 +49,16 @@ body {
     background-color: purple;
 }
 
+.dcircle1 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: #2D1E2F;
+}
+
 .circle2 {
     user-select: none;
     display: inline-block;
@@ -57,6 +67,16 @@ body {
     border-radius: 100%;
     border: 5px solid transparent;
     background-color: blue;
+}
+
+.dcircle2 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: #00003f;
 }
 
 .circle3 {
@@ -69,6 +89,16 @@ body {
     background-color: cyan;
 }
 
+.dcircle3 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: #005858;
+}
+
 .circle4 {
     user-select: none;
     display: inline-block;
@@ -77,6 +107,16 @@ body {
     border-radius: 100%;
     border: 5px solid transparent;
     background-color: #90DDF0;
+}
+
+.dcircle4 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: #13768f; 
 }
 
 .circle5 {
@@ -89,6 +129,16 @@ body {
     background-color: yellow;
 }
 
+.dcircle5 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: #707000;
+}
+
 .circle6 {
     user-select: none;
     display: inline-block;
@@ -97,6 +147,16 @@ body {
     border-radius: 100%;
     border: 5px solid transparent;
     background-color: orange;
+}
+
+.dcircle6 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: #613f00;
 }
 
 .circle1:hover {
