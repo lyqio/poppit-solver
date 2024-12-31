@@ -404,9 +404,42 @@ func user_move(pos *PoppitNode, board *[][]int) {
     print_board(*board)
 }
 
-func play_game() {
+func play_game2() {
     board := [][]int{
 	{1, 1, 1, 1},
+	{1, 1, 1, 1},
+	{1, 1, 1, 1},
+	{1, 1, 1, 1},
+    }
+
+    pos := PoppitNode {
+	winner: -1,
+	player1: false,
+	position: count_spots(board),
+	children: nil,
+    }
+
+    fmt.Println("Generating nodes...")
+    generate_children(&pos)
+    fmt.Println("Assigning nodes...")
+    assign_children(&pos)
+    fmt.Println("Finished!")
+
+    fmt.Printf("Player %d wins\n", pos.winner)
+    print_board(board)
+
+//    for i := 0; i < len(pos.children); i++ {
+//	fmt.Printf("%d | ", pos.children[i].winner)
+//    }
+
+    for len(pos.children) > 0 {
+	user_move(&pos, &board)
+	ai_move(&pos, &board)
+    }
+}
+
+func play_game() {
+    board := [][]int{
 	{1, 1, 1, 1},
 	{1, 1, 1, 1},
 	{1, 1, 1, 1},
@@ -425,7 +458,7 @@ func play_game() {
     assign_children(&pos)
     fmt.Println("Finished!")
 
-    fmt.Printf("Player %d wins", pos.winner)
+    fmt.Printf("Player %d wins\n", pos.winner)
 
 //    for i := 0; i < len(pos.children); i++ {
 //	fmt.Printf("%d | ", pos.children[i].winner)
@@ -439,5 +472,5 @@ func play_game() {
 
 func main() {
 
-    play_game()
+    play_game2()
 }
