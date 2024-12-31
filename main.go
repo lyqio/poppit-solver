@@ -43,7 +43,8 @@ func generate_children(node *PoppitNode) {
 
 	node.children = append(node.children, &child)
 
-    } else if node.position[2] > 0 {
+    }
+    if node.position[2] > 0 {
 	new_pos := copyMap(node.position)
 	new_pos[2]--
 	new_pos[1]++
@@ -76,6 +77,8 @@ func generate_children(node *PoppitNode) {
 }
 
 func assign_children(node *PoppitNode) {
+    fmt.Print(node.position, node.player1, " ")
+    
     // Return if this node has already been explored
     if node.winner != -1 {
 	return
@@ -91,6 +94,7 @@ func assign_children(node *PoppitNode) {
 	    node.winner = 2
 	}
 
+	fmt.Println(node.winner)
 	return
     }
 
@@ -130,6 +134,8 @@ func assign_children(node *PoppitNode) {
 	    node.winner = 1
 	}
     } 
+
+    fmt.Println(node.winner)
 }
 
 func main() {
@@ -153,5 +159,10 @@ func main() {
     generate_children(&start_position)
     assign_children(&start_position)
 
-    fmt.Println(start_position.winner)
+    fmt.Println("\n\n\n\n")
+    fmt.Printf("Winner is %d\n", start_position.winner)
+    
+//    for i := 0; i < len(start_position.children); i++ {
+//	fmt.Printf("%d | ", start_position.children[i].winner)
+//    }
 }
