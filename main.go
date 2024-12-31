@@ -601,5 +601,6 @@ func play_game() {
 }
 
 func main() {
-    play_game2()
+    run_app()
+    // play_game2()
 }

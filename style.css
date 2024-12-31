@@ -1,0 +1,124 @@
+
+body {
+    background-color: black;
+}
+
+.container1 {
+    position: absolute;
+    top: 50px;
+    left: 150px;
+}
+
+.container2 {
+    position: absolute;
+    top: 160px;
+    left: 150px;
+}
+
+.container3 {
+    position: absolute;
+    top: 270px;
+    left: 150px;
+}
+
+.container4 {
+    position: absolute;
+    top: 380px;
+    left: 150px;
+}
+
+.container5 {
+    position: absolute;
+    top: 490px;
+    left: 150px;
+}
+
+.container6 {
+    position: absolute;
+    top: 600px;
+    left: 150px;
+}
+
+.circle1 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: purple;
+}
+
+.circle2 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: blue;
+}
+
+.circle3 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: cyan;
+}
+
+.circle4 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: #90DDF0;
+}
+
+.circle5 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: yellow;
+}
+
+.circle6 {
+    user-select: none;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    border: 5px solid transparent;
+    background-color: orange;
+}
+
+.circle1:hover {
+    border: 5px solid red;
+}
+
+.circle2:hover {
+    border: 5px solid red;
+}
+
+.circle3:hover {
+    border: 5px solid red;
+}
+
+.circle4:hover {
+    border: 5px solid red;
+}
+
+.circle5:hover {
+    border: 5px solid red;
+}
+
+.circle6:hover {
+    border: 5px solid red;
+}
