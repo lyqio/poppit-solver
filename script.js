@@ -66,6 +66,7 @@ function has(s, item) {
     return false
 }
 
+
 function valid_spot(s, x, y) {
     if (s[0][0] != x) {
 	return false
@@ -89,6 +90,8 @@ function valid_spot(s, x, y) {
 }
 
 let selected = [] 
+let elems = []
+let last_colour = []
 function handle_click(e) {
     div_element = e.target
     pos = Number(div_element.id)
@@ -106,6 +109,8 @@ function handle_click(e) {
 
     if (selected.length == 0) {
 	selected.push([x, y])
+	elems.push(div_element)
+	last_colour.push(div_element.style.backgroundColor)
 	div_element.style.backgroundColor = "red"
 	return
     }
@@ -113,8 +118,33 @@ function handle_click(e) {
     console.log("Checking ", x, y)
     if (valid_spot(selected, x, y)) {
 	selected.push([x, y])
+	elems.push(div_element)
+	last_colour.push(div_element.style.backgroundColor)
 	div_element.style.backgroundColor = "red"
+    } else {
+	selected = []
+	for (let i = 0; i < elems.length; i++) {
+	    elems[i].style.backgroundColor = last_colour[i]
+	}
+	elems = []
+	last_colour = []
     }
+}
+
+function submit() {
+    for (let s of selected) {
+	board[s[0]][s[1]] = 0
+    }
+
+    for (let i = 0; i < elems.length; i++) {
+	elems[i].className = `d${elems[i].className}`
+	elems[i].style.backgroundColor = last_colour[i]
+	console.log(elems[i].className)
+    }
+
+    selected = []
+    elems = []
+    last_colour = []
 }
 
 for (let i = 0; i < elements.length; i++) {
