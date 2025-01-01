@@ -26,13 +26,31 @@ function add_grid(n) {
 // draw the grid to the screen
 let elements = add_grid(6)
 let board = [
-    [1, 1, 0, 1, 1, 1],
-    [1, 1, 0, 1, 1, 1],
-    [1, 1, 0, 1, 1, 1],
-    [1, 1, 0, 1, 1, 1],
-    [1, 1, 0, 1, 1, 1],
-    [1, 1, 0, 1, 1, 1]
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1]
 ]
+
+async function send_message(message) {
+    await fetch("http://localhost:8080/api/message", {
+	method: "post",
+	body: message,
+	headers: {
+	    "Content-Type": "api/message"
+	}
+    }).then((response) => {
+	console.log(response)
+    })
+}
+
+async function fetch_message() {
+    let obj = await fetch("http://localhost:8080/api/message")
+    let text = await obj.text()
+    return text
+}
 
 function update_board(elem, board) {
     for (let i of elem) {

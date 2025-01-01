@@ -1,30 +1,28 @@
 package main
 import "net/http"
 import "fmt"
-import "os"
+import "log"
 const DIR = "index.html"
 
-func handler(w http.ResponseWriter, r *http.Request) {
-    file, err := os.Open(DIR)
-    if err != nil {
-	fmt.Printf("ERR: Unable to open %s\n", DIR)
-	return
-    }
+func serveStatic() {
+    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+}
 
-    defer file.Close()
-    w.Header().Set("Content-Type", "text/html")  
+func serveHTML(w http.ResponseWriter, r *http.Request) {
+    http.ServeFile(w, r, "index.html")
+}
 
-    _, err = file.WriteTo(w)
-    if err != nil {
-	http.Error(w, "Could not write HTML file to response", http.StatusInternalServerError)
-    }
+var message string = "DefaultMessage"
+func send_message(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprint(w, message)
 }
 
 func run_app() {
-    http.HandleFunc("/", handler) // Handle requests to the root path
-    fmt.Println("Starting server on :8080")
-    err := http.ListenAndServe(":8080", nil) // Start the server on port 8080
-    if err != nil {
-        fmt.Println("Error starting server:", err)
-    }
+    message = "HELLO"
+
+    serveStatic()
+    http.HandleFunc("/", serveHTML)
+    http.HandleFunc("/api/message", send_message)
+    fmt.Println("Server running on http://localhost:8080")
+    log.Fatal(http.ListenAndServe(":8080", nil))
 }
