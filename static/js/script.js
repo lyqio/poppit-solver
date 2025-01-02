@@ -23,34 +23,55 @@ function add_grid(n) {
     return elements
 }
 
+function remove_leading_zero(s) {
+    while (s.length > 0 && s[0] == '0') {
+	s.shift()
+    }
+    return s
+}
+
+function get_position() {
+    if (document.URL.split('/')[3].length == 0) {
+	location.replace("http://localhost:8080/1FFFFFFFFF")
+	return [[
+	    [1,1,1,1,1,1],
+	    [1,1,1,1,1,1],
+	    [1,1,1,1,1,1],
+	    [1,1,1,1,1,1],
+	    [1,1,1,1,1,1],
+	    [1,1,1,1,1,1],
+	], "1"]
+    }
+
+    let url = document.URL.split('/')[3]
+    let bin = remove_leading_zero(parseInt(url.toString(), 16).toString(2))
+
+    let player = bin[bin.length-1]
+
+    let brd = []
+    let t = []
+    for (let i = 0; i < 36; i++) {
+	if (i % 6 == 0 && t != []) {
+	    brd.push(t)
+	    t = []
+	}
+
+	t.push(parseInt(bin[i]))
+    }
+    brd.push(t)
+    brd.shift()
+
+    return [brd, player]
+}
+
 // draw the grid to the screen
 let elements = add_grid(6)
-let board = [
-    [1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1]
-]
-
-async function send_message(message) {
-    await fetch("http://localhost:8080/api/message", {
-	method: "post",
-	body: message,
-	headers: {
-	    "Content-Type": "api/message"
-	}
-    }).then((response) => {
-	console.log(response)
-    })
-}
-
-async function fetch_message() {
-    let obj = await fetch("http://localhost:8080/api/message")
-    let text = await obj.text()
-    return text
-}
+console.log("HERE")
+let board = []
+let player = "1"
+let c = get_position()
+board = c[0]
+player = c[1]
 
 function update_board(elem, board) {
     for (let i of elem) {
@@ -149,20 +170,32 @@ function handle_click(e) {
     }
 }
 
+function change_link() {
+    let new_bin = ""
+    
+    for (let i of board) {
+	for (let q of i) {
+	    new_bin += q.toString()
+	}
+    }
+
+    if (player == "1") {
+	new_bin += "0"
+    }
+    else {
+	new_bin += "1"
+    }
+
+    let link = remove_leading_zero(parseInt(new_bin.toString(), 2).toString(16))
+    location.replace(`http://localhost:8080/${link}`)
+}
+
 function submit() {
     for (let s of selected) {
 	board[s[0]][s[1]] = 0
     }
 
-    for (let i = 0; i < elems.length; i++) {
-	elems[i].className = `d${elems[i].className}`
-	elems[i].style.backgroundColor = last_colour[i]
-	console.log(elems[i].className)
-    }
-
-    selected = []
-    elems = []
-    last_colour = []
+    change_link()
 }
 
 for (let i = 0; i < elements.length; i++) {

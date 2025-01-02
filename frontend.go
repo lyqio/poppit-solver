@@ -9,20 +9,17 @@ func serveStatic() {
 }
 
 func serveHTML(w http.ResponseWriter, r *http.Request) {
+    url := r.URL.String()
+    fmt.Println("Current url: ", url)
+
+    http.Redirect(w, r, "http://localhost:8080/HEY", http.StatusFound)
     http.ServeFile(w, r, "index.html")
 }
 
-var message string = "DefaultMessage"
-func send_message(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprint(w, message)
-}
-
 func run_app() {
-    message = "HELLO"
 
     serveStatic()
     http.HandleFunc("/", serveHTML)
-    http.HandleFunc("/api/message", send_message)
     fmt.Println("Server running on http://localhost:8080")
     log.Fatal(http.ListenAndServe(":8080", nil))
 }

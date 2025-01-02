@@ -529,6 +529,10 @@ func user_move(pos *PoppitNode, board *[][]int) {
     print_board(*board)
 }
 
+func frontend_user_move(pos *PoppitNode, board *[][]int) {
+
+}
+
 func play_game2() {
     board := [][]int{
 	{1, 1, 1, 1, 1, 1},
@@ -560,7 +564,8 @@ func play_game2() {
 //    }
 
     for len(pos.children) > 0 {
-	user_move(&pos, &board)
+	frontend_user_move(&pos, &board)
+	// user_move(&pos, &board)
 	ai_move(&pos, &board)
     }
 }
@@ -601,6 +606,8 @@ func play_game() {
 }
 
 func main() {
-    run_app()
-    // play_game2()
+    go run_app()
+    //play_game2()
+
+    select{}
 }
