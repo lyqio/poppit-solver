@@ -8,11 +8,20 @@ func serveStatic() {
     http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 }
 
+var URL string = ""
+var CHANGE_URL string = ""
 func serveHTML(w http.ResponseWriter, r *http.Request) {
-    url := r.URL.String()
-    fmt.Println("Current url: ", url)
+    URL = r.URL.String()
+    fmt.Println("URL UPDATE: ", URL)
 
-    http.Redirect(w, r, "http://localhost:8080/HEY", http.StatusFound)
+    if CHANGE_URL != "" {
+	fmt.Println("CHANGING URL")
+	new_link := "http://localhost:8080/" + CHANGE_URL
+        http.Redirect(w, r, new_link, http.StatusFound)
+	CHANGE_URL = ""
+    }
+
+//    http.Redirect(w, r, "http://localhost:8080/HEY", http.StatusFound)
     http.ServeFile(w, r, "index.html")
 }
 

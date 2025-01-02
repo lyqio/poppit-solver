@@ -529,8 +529,149 @@ func user_move(pos *PoppitNode, board *[][]int) {
     print_board(*board)
 }
 
-func frontend_user_move(pos *PoppitNode, board *[][]int) {
+func convert_board(link string) [][]int {
+    bin, err := strconv.ParseUint(link, 16, 64)
 
+    if err != nil {
+	fmt.Println("ERROR IN CONVERSION")
+    }
+
+    b := strconv.FormatUint(bin, 2) 
+    for b[0] == '0' {
+	b = b[1:]
+    }
+    
+    var board [][]int
+    var t []int
+    for i := 0; i < 36; i++ {
+	if i % 6 == 0 {
+	    board = append(board, t)
+	    t = []int{}
+	}
+	
+	a, _ := strconv.Atoi(string(b[i]))
+	t = append(t, a)
+    }
+
+    board = board[1:]
+    //fmt.Print("NEW BOARD: \n")
+    print_board(board)
+    return board
+}
+
+func frontend_user_move(pos *PoppitNode, board *[][]int) {
+    for URL == "" {}    
+    fmt.Println("RECIEVED: ", URL[1:])
+    new_board := convert_board(URL[1:])
+
+    fmt.Println("NEW BOARD: ")
+    print_board(new_board)
+
+    if reflect.DeepEqual(new_board, *board) {
+	URL = ""
+	frontend_user_move(pos, board)
+	return
+    }
+
+    x := 0
+    y := 0
+    over := false
+    b := *board
+    for i := 0; i < len(b); i++ {
+	for q := 0; q < len(b[i]); q++ {
+	    if b[i][q] != new_board[i][q] {
+		x = i
+		y = q
+		over = true
+		break
+	    } 
+	}
+	if over {
+	    break
+	}
+    }
+
+    ln := 1
+    for i := y+1; i < len(b[x]) && b[x][i] != 1; i++ {
+	ln++
+    }
+
+    fmt.Println("!()! ", x, y, ln)
+
+    b = *board
+    for i := y; i < y+ln; i++ {
+	b[x][i] = 0
+    }
+
+    *board = b
+
+    state := count_spots(*board)
+    var move PoppitNode
+    for i := 0; i < len(pos.children); i++ {
+ //	fmt.Println("C: ", *pos.children[i], " ", state)
+	if reflect.DeepEqual(pos.children[i].position, state) {
+	    move = *pos.children[i]
+	}
+    }
+    *pos = move
+
+    fmt.Println("A:", pos.position)
+
+    if pos.player1 {
+	fmt.Println("player 1")
+    } else {
+	fmt.Println("player 2")
+    }
+    print_board(*board)
+
+    URL = ""
+}
+
+func board_to_hex(board [][]int) string {
+    bin := ""
+    for i := 0; i < len(board); i++ {
+	for q := 0; q < len(board[i]); q++ {
+	    bin += string(board[i][q]+'0')
+	}
+    }
+    
+    // Add the fact it's player '0's turn although this doesn't matter and isn't used anywhere
+    bin += "0"
+    b, _ := strconv.ParseUint(bin, 2, 64)
+    return fmt.Sprintf("%x", b)
+}
+
+func frontend_ai_move(pos *PoppitNode, board *[][]int) {
+    fmt.Println("BEFORE:", pos.position)
+    var move PoppitNode
+    for i := 0; i < len(pos.children); i++ {
+	if pos.children[i].winner == 1 {
+	    move = *pos.children[i]
+	}
+    }
+
+    fmt.Println("B:", move.position)
+
+    b := find_move(*board, move)
+    if b == nil {
+	fmt.Println("ERR: Nil reached somehow")
+	return
+    }
+
+    *board = b 
+    *pos = move
+    
+    if pos.player1 {
+	fmt.Println("player 1")
+    } else {
+	fmt.Println("player 2")
+    }
+
+    fmt.Println("AI BOARD:")
+    print_board(*board)
+    link := board_to_hex(*board)
+    fmt.Println("AI LINK: ", link)
+    CHANGE_URL = link
 }
 
 func play_game2() {
@@ -566,7 +707,8 @@ func play_game2() {
     for len(pos.children) > 0 {
 	frontend_user_move(&pos, &board)
 	// user_move(&pos, &board)
-	ai_move(&pos, &board)
+	frontend_ai_move(&pos, &board)
+	// ai_move(&pos, &board)
     }
 }
 
@@ -607,7 +749,7 @@ func play_game() {
 
 func main() {
     go run_app()
-    //play_game2()
+    play_game2()
 
     select{}
 }
