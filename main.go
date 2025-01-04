@@ -5,7 +5,6 @@ import "os"
 import "bufio"
 import "strings"
 import "strconv"
-import "net/http"
 
 const BOARD_SIZE = 6
 
@@ -219,7 +218,7 @@ func options_6(node *PoppitNode) []PoppitNode {
 
     new_pos6 := copyMap(node.position)
     new_pos6[6]--
-    new_pos6[2]++
+    new_pos6[2] += 2
     child6 := make_node(node, new_pos6)
 
     new_pos7 := copyMap(node.position)
@@ -642,7 +641,7 @@ func board_to_hex(board [][]int) string {
     return fmt.Sprintf("%x", b)
 }
 
-func frontend_ai_move(pos *PoppitNode, board *[][]int, w http.ResponseWriter, r *http.Request) {
+func frontend_ai_move(pos *PoppitNode, board *[][]int) {
     fmt.Println("BEFORE:", pos.position)
     var move PoppitNode
     for i := 0; i < len(pos.children); i++ {
@@ -672,10 +671,9 @@ func frontend_ai_move(pos *PoppitNode, board *[][]int, w http.ResponseWriter, r 
     print_board(*board)
     link := board_to_hex(*board)
     fmt.Println("AI LINK: ", "http://localhost:8080/"+link)
-    http.Redirect(w, r, "http://localhost:8080/"+link, http.StatusFound)
 }
 
-func play_game2(w http.ResponseWriter, r *http.Request) {
+func play_game2() {
     board := [][]int{
 	{1, 1, 1, 1, 1, 1},
 	{1, 1, 1, 1, 1, 1},
@@ -706,10 +704,8 @@ func play_game2(w http.ResponseWriter, r *http.Request) {
 //    }
 
     for len(pos.children) > 0 {
-	frontend_user_move(&pos, &board)
-	// user_move(&pos, &board)
-	frontend_ai_move(&pos, &board, w, r)
-	// ai_move(&pos, &board)
+	user_move(&pos, &board)
+	ai_move(&pos, &board)
     }
 }
 
@@ -749,5 +745,7 @@ func play_game() {
 }
 
 func main() {
-    run_app()
+    // don't go 0 2 2
+    play_game2()
+    // run_app()
 }

@@ -14,8 +14,6 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
     URL = r.URL.String()
     fmt.Println("URL UPDATE: ", URL)
 
-    go play_game2(w, r)
-
     http.ServeFile(w, r, "index.html")
 }
 
